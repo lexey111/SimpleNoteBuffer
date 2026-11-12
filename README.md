@@ -9,6 +9,20 @@ Ten slots of text that are still there next week. A place for a piece of text th
 |------|------|
 | ![Light](screenshot1.png) | ![Dark](screenshot2.png) |
 
+## Download
+
+**[Download SimpleNoteBuffer.dmg](https://github.com/lexey111/SimpleNoteBuffer/releases/latest/download/SimpleNoteBuffer-1.0.0.dmg)**
+
+### Install
+
+1. Open the DMG and drag **SimpleNoteBuffer** to **Applications**
+2. **The app is not notarized**, so macOS will block it on first launch:
+   - Open **System Settings → Privacy & Security**, scroll to the Security section and click **Open Anyway** next to SimpleNoteBuffer
+   - Or: right-click the app in Applications → **Open** → **Open**
+3. **If macOS asks about clipboard access** — since 15.4 it can, depending on settings, before an app reads what other apps copied. The clipboard column never raises that dialog: where the setting is "Ask" it says so and offers a shortcut to **System Settings → Privacy & Security → Paste from Other Apps**. Set **SimpleNoteBuffer** to **Allow** there to see the preview, or hide the column (View ▸ Show Clipboard)
+
+> The app is ad-hoc signed. After installing a new version macOS may treat it as a new app and ask again.
+
 ## What it does
 
 - **Ten numbered slots** in a column at the side, ⌘1 … ⌘0. A slot that holds something is lit and shows its first line.
