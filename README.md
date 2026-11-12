@@ -16,12 +16,9 @@ Ten slots of text that are still there next week. A place for a piece of text th
 ### Install
 
 1. Open the DMG and drag **SimpleNoteBuffer** to **Applications**
-2. **The app is not notarized**, so macOS will block it on first launch:
-   - Open **System Settings → Privacy & Security**, scroll to the Security section and click **Open Anyway** next to SimpleNoteBuffer
-   - Or: right-click the app in Applications → **Open** → **Open**
+2. The app is signed with a Developer ID and notarized by Apple, so it opens like any other
 3. **If macOS asks about clipboard access** — since 15.4 it can, depending on settings, before an app reads what other apps copied. The clipboard column never raises that dialog: where the setting is "Ask" it says so and offers a shortcut to **System Settings → Privacy & Security → Paste from Other Apps**. Set **SimpleNoteBuffer** to **Allow** there to see the preview, or hide the column (View ▸ Show Clipboard)
 
-> The app is ad-hoc signed. After installing a new version macOS may treat it as a new app and ask again.
 
 ## What it does
 
@@ -49,5 +46,7 @@ Open `SimpleNoteBuffer.xcodeproj` in Xcode 16 or later and run, or:
 ```bash
 ./scripts/build-release.sh 1.0.0   # → build/SimpleNoteBuffer-1.0.0.dmg
 ```
+
+With a Developer ID Application certificate in the keychain the script signs the app and the DMG with it, notarizes the DMG and staples the ticket (credentials from the keychain profile `simple-utilities-notary`, stored once with `xcrun notarytool store-credentials`); without one the build is ad-hoc signed.
 
 `scripts/make-icon.swift` draws the app icon at every size.
