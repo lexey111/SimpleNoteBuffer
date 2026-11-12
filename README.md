@@ -28,6 +28,7 @@ Ten slots of text that are still there next week. A place for a piece of text th
 - **Copy** takes the selection, or the whole slot when nothing is selected (⇧⌘C); **Copy as Plain Text** (⌥⇧⌘C) drops the styles.
 - **Save to File…** (⌘S): plain text, RTF, or RTFD where the slot holds pictures.
 - **Clear Slot** (⇧⌘⌫). Undo brings the text back.
+- **The same six on a slot's right click**: paste into it, copy it whole, save or clear it without opening it first.
 - **Light and dark**: Auto · Day · Night in the status line, and in the View menu.
 - **The clipboard beside the page**: a third column shows what is on the clipboard now — the head of the text, the picture, the file names. It looks only while the app is in front, and can be hidden (View ▸ Show Clipboard, ⌥⌘B).
 - **Your layout**: drag the gaps beside the page to size the columns; the buttons show their names or icons only (View ▸ Show Button Labels).

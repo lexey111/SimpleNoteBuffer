@@ -95,6 +95,16 @@ final class EditorController: NSObject, NSTextViewDelegate {
     // MARK: - Toolbar
 
     /// The clipboard as it is: styles and pictures come along.
+    /// Before a verb from a slot's menu: the menu speaks of the whole slot,
+    /// so a selection is let go, and what is pasted into a slot that was
+    /// not on the page goes after its text, not before it.
+    func aim(atEnd: Bool) {
+        guard let textView, let storage = textView.textStorage else { return }
+        let at = atEnd ? storage.length : textView.selectedRange().location
+        textView.setSelectedRange(NSRange(location: min(at, storage.length), length: 0))
+        if atEnd { textView.scrollToEndOfDocument(nil) }
+    }
+
     func paste() {
         focus()
         textView?.paste(nil)

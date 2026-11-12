@@ -93,7 +93,8 @@ struct ContentView: View {
             Color.clear.frame(height: Self.lightsRoom).contentShape(Rectangle()).gesture(WindowDragGesture())
             ForEach(0..<SlotStore.count, id: \.self) { index in
                 SlotRow(index: index, chosen: index == store.selected, filled: store.isFilled(index),
-                        preview: store.previews[index], theme: theme) {
+                        hasWords: store.hasWords[index], preview: store.previews[index], theme: theme,
+                        verb: { verb in on(index, verb) }) {
                     store.selected = index
                     controller.focus()
                 }
@@ -102,6 +103,27 @@ struct ContentView: View {
         }
         .padding(.horizontal, 10)
         .padding(.bottom, 10)
+    }
+
+    /// A verb from a slot's own menu: the slot is put on the page first —
+    /// a verb acts on what is seen — and then it is done.
+    private func on(_ index: Int, _ verb: SlotVerb) {
+        let wasShown = store.selected == index
+        store.selected = index
+        controller.show(index)
+        switch verb {
+        case .paste, .pastePlain: controller.aim(atEnd: !wasShown)
+        case .copy, .copyPlain: controller.aim(atEnd: false)
+        case .save, .clear: break
+        }
+        switch verb {
+        case .paste: controller.paste()
+        case .pastePlain: controller.pastePlain()
+        case .copy: controller.copy() as Void   // not NSObject's copy()
+        case .copyPlain: controller.copyPlain()
+        case .save: controller.save()
+        case .clear: controller.clear()
+        }
     }
 
     private func verbs(_ theme: Theme) -> some View {
@@ -115,6 +137,7 @@ struct ContentView: View {
             verb("text.alignleft", "Copy Plain", "Copy as Plain Text — ⌥⇧⌘C", theme, off: wordless) { controller.copyPlain() }
             divider(theme)
             verb("square.and.arrow.down", "Save", "Save to File… — ⌘S", theme, off: empty) { controller.save() }
+            divider(theme)
             verb("trash", "Clear", "Clear Slot — ⇧⌘⌫", theme, off: empty) { controller.clear() }
         }
     }
@@ -215,13 +238,18 @@ private struct ColumnGrip: View {
     }
 }
 
+/// What the bar's buttons do — the same six in a slot's menu.
+enum SlotVerb { case paste, pastePlain, copy, copyPlain, save, clear }
+
 /// One slot in the column.
 private struct SlotRow: View {
     let index: Int
     let chosen: Bool
     let filled: Bool
+    let hasWords: Bool
     let preview: String
     let theme: Theme
+    let verb: (SlotVerb) -> Void
     let action: () -> Void
     @State private var hovered = false
 
@@ -252,6 +280,18 @@ private struct SlotRow: View {
         .buttonStyle(.plain)
         .onHover { hovered = $0 }
         .help("Slot \(index + 1) — ⌘\(index == 9 ? 0 : index + 1)")
+        // Everything the bar does, for this slot, under the right button.
+        .contextMenu {
+            Button("Paste", systemImage: "doc.on.clipboard") { verb(.paste) }
+            Button("Paste as Plain Text", systemImage: "text.badge.plus") { verb(.pastePlain) }
+            Divider()
+            Button("Copy", systemImage: "doc.on.doc") { verb(.copy) }.disabled(!filled)
+            Button("Copy as Plain Text", systemImage: "text.alignleft") { verb(.copyPlain) }.disabled(!hasWords)
+            Divider()
+            Button("Save to File…", systemImage: "square.and.arrow.down") { verb(.save) }.disabled(!filled)
+            Divider()
+            Button("Clear", systemImage: "trash") { verb(.clear) }.disabled(!filled)
+        }
     }
 }
 
